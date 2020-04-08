@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Můj chat</title>
+    <script>
+        const HOST = window.location.protocol + "//" + window.location.hostname + ((window.location.port) ? ":" + window.location.port : "");
+
+        function ukazChybu(e) {
+            console.error('Error:', e.toString());
+            let s;
+            if (typeof e == "object") {
+                s = JSON.stringify(e);
+            } else {
+                s = e;
+            }
+            document.getElementById("div_chyby").innerHTML = `<input type="button" value="x" onclick="document.getElementById('div_chyby').style.display = 'none'"> ${s}`;
+            document.getElementById("div_chyby").style.display = 'block';
+        }
+
+        function ukazDen() {
+            let url = `${HOST}/denvtydnu`;
+            fetch(url).then(function (response) {
+                response.text().then(function (text) {
+                    let obj = JSON.parse(text);
+                    document.getElementById("den").innerHTML = obj.den.toLowerCase();
+                    document.getElementById("datum").innerHTML = obj.datum;
+                }).catch((error) => {
+                    ukazChybu(error);
+                });
+            });
+        }
+
+        function ukazCas() {
+            let url = `${HOST}/cas`;
+            fetch(url).then(function (response) {
+                response.text().then(function (text) {
+                    let obj = JSON.parse(text);
+                    document.getElementById("cas").innerHTML = obj.cas;
+                }).catch((error) => {
+                    ukazChybu(error);
+                });
+            });
+        }
+        function ukazZpravy() {
+            let url = `${HOST}/chat/list`;
+            fetch(url).then(function (response) {
+                response.text().then(function (text) {
+                    let obj = JSON.parse(text);
+                    let s = "";
+                    for (let o of obj.messages) {
+                        s = s + o.time + "" + o.message + "<br>";
+                    }
+                    document.getElementById("zpravy").innerHTML = s;
+                }).catch((error) => {
+                    ukazChybu(error);
+                });
+            });
+        }
+       function posliZpravu() {
+            let m  document.getElementById("zprava").value;
+            let url = HOST+"/chat/add?msg="+m;
+            fetch(url).then(function (response) {
+                response.text().then(function (text) {
+                    let obj = JSON.parse(text);
+
+                });
+            });
+        }
+
+        function ukazDatum() {
+            let url = `${HOST}/datum`;
+            fetch(url).then(function (response) {
+                response.text().then(function (text) {
+                    let obj = JSON.parse(text);
+                    document.getElementById("datumNove").innerHTML = obj.datum;
+                }).catch((error) => {
+                    ukazChybu(error);
+                });
+            });
+        }
+
+        function spustPoNacteni() {
+            ukazDen();
+            setInterval(ukazCas, 1000);
+            setInterval(ukazZpravy, 1000);
+
+        }
+
+        function ukazDen2Get() {
+            let dt = document.getElementById("datum2").valueAsDate;
+            if (!dt) return;
+            let url = `${HOST}/denvtydnu?r=${dt.getFullYear()}&m=${dt.getMonth() + 1}&d=${dt.getDate()}`;
+            fetch(url).then(function (response) {
+                response.text().then(function (text) {
+                    let obj = JSON.parse(text);
+                    document.getElementById("den2").innerHTML = obj.den.toLowerCase();
+                    document.getElementById("datum2").innerHTML = obj.datum;
+                }).catch((error) => {
+                    ukazChybu(error);
+                });
+            });
+        }
+        function ukazDen2Post() {
+            let dt = document.getElementById("datum2").valueAsDate;
+            if (!dt) return;
+            let url = `${HOST}/denvtydnu`;
+            let body = {"r": dt.getFullYear(), "m": dt.getMonth() + 1, "d": dt.getDate()};
+            let opt = {"method": "POST", "body": JSON.stringify(body)};
+            fetch(url, opt).then(function (response) {
+                response.text().then(function (text) {
+                    let obj = JSON.parse(text);
+                    document.getElementById("den2").innerHTML = obj.den.toLowerCase();
+                    document.getElementById("datum2").innerHTML = obj.datum;
+                }).catch((error) => {
+                    ukazChybu(error);
+                });
+            });
+        }
+        function ukazDen2() {
+            if (document.getElementById("GET").checked) {
+                ukazDen2Get();
+            } else {
+                ukazDen2Post();
+            }
+        }
+
+    </script>
+</head>
+<body onload="spustPoNacteni()">
+<div id="div_chyby" style="color: white; background-color: red; display: none"></div>
+
+<h1>Můj chat <a href="https://github.com/liborsvejda/spaserver" target="_blank"></a></h1>
+
+Dnes je <span id="den">...</span> <span id="datum">...</span>. Čas na serveru je <span id="cas">...</span>.
+<br><br>
+<input type ="text" id="zpravy"> <input type="button" value="Odeslat" onclick="posliZpravu()" >
+<br><br>
+
+<div id="zprava">...</div>
+</body>
+</html>
