@@ -49,14 +49,14 @@
                     let obj = JSON.parse(text);
                     let s = "";
                     for (let o of obj.messages) {
-                        s = s + o.time + "" + o.message + "<br>";
+                        s = s + o.time + "" +   o.message + "<br>";
                     }
                     document.getElementById("zpravy").innerHTML = s;
                 }).catch((error) => {
                     ukazChybu(error);
                 });
             });
-        }
+        }u
        function posliZpravu() {
             let m = document.getElementById("zprava").value;
             let url = HOST+"/chat/add?msg="+m;
@@ -138,5 +138,6 @@ Dnes je <span id="den">...</span> <span id="datum">...</span>. Čas na serveru j
 <br><br>
 
 <div id="zpravy">...</div>
+<br><br>
 </body>
 </html>
