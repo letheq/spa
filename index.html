@@ -58,7 +58,7 @@
             });
         }
        function posliZpravu() {
-            let m  document.getElementById("zprava").value;
+            let m = document.getElementById("zprava").value;
             let url = HOST+"/chat/add?msg="+m;
             fetch(url).then(function (response) {
                 response.text().then(function (text) {
@@ -134,9 +134,9 @@
 
 Dnes je <span id="den">...</span> <span id="datum">...</span>. Čas na serveru je <span id="cas">...</span>.
 <br><br>
-<input type ="text" id="zpravy"> <input type="button" value="Odeslat" onclick="posliZpravu()" >
+<input type ="text" id="zprava"> <input type="button" value="Odeslat" onclick="posliZpravu()" >
 <br><br>
 
-<div id="zprava">...</div>
+<div id="zpravy">...</div>
 </body>
 </html>
