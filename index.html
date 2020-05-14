@@ -49,7 +49,7 @@
                     let obj = JSON.parse(text);
                     let s = "";
                     for (let o of obj.messages) {
-                        s = s + o.time + "" +  "<br>"  +  o.message  +  o.nickname;
+                        s = o.time + "" +  "<br>"  +  o.message  +  o.nickname + s;
                     }
                     document.getElementById("zpravy").innerHTML = s;
                 }).catch((error) => {
