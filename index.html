@@ -65,7 +65,8 @@
             let url = `${HOST}/chat/add?msg= Odesláno uživatelem:${n}  Zpráva: ${m}`;
             fetch(url).then(function (response) {
                 response.text().then(function (text) {
-                    let obj = JSON.parse(text);
+                    let obj;
+                    obj = JSON.parse(text);
 
                 });
             });
